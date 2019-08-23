@@ -9,13 +9,13 @@ grid-template-columns :repeat(5, 1fr);
 grid-gap:15px;
 margin-top:40px;
  `
- function getCoinsToDisplay(coinList){
-   return Object.keys(coinList).slice(0,500);//for showing number of tiles
+ function getCoinsToDisplay(coinList,topSection,favourites){
+   return topSection ? favourites : Object.keys(coinList).slice(0,500);//for showing number of tiles
  }
- export default function(){
+ export default function({topSection}){
    return <AppContext.Consumer>
-   {({coinList})=><CoinGridStyled>
-   {getCoinsToDisplay(coinList).map(coinKey =><CoinTile coinKey={coinKey}/>
+   {({coinList,favourites})=><CoinGridStyled>
+   {getCoinsToDisplay(coinList,topSection,favourites).map(coinKey =><CoinTile topSection={topSection} coinKey={coinKey}/>
    )}
    </CoinGridStyled>}
    </AppContext.Consumer>

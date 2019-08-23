@@ -28,7 +28,8 @@ function ControlButton({name}){
      {({page,setPage})=>(
     <ControlButtonElem
      active ={page === name}
-     onClick={()=>setPage(name)}>
+     onClick={()=>setPage(name)}
+     >
 
       {toProperCase(name)}
     </ControlButtonElem>)
