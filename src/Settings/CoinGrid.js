@@ -19,11 +19,15 @@ Object.keys(coinList).slice(0,500)
  }
 
  export default function({topSection}){
-   return <AppContext.Consumer>
-   {({coinList,favourites,filteredCoins})=><CoinGridStyled>
-   {getCoinsToDisplay(coinList,topSection,favourites,filteredCoins).map(coinKey =>
-     <CoinTile topSection={topSection} coinKey={coinKey}/>
-   )}
-   </CoinGridStyled>}
+   return(
+    <AppContext.Consumer>
+   {({coinList,favourites,filteredCoins})=>(
+   <CoinGridStyled>
+     {getCoinsToDisplay(coinList,topSection,favourites,filteredCoins).map(coinKey =>
+     <CoinTile key={coinKey} topSection={topSection} coinKey={coinKey}/>
+      )}
+   </CoinGridStyled>
+ )}
    </AppContext.Consumer>
+ );
  }
