@@ -36,6 +36,7 @@ export class AppProvider extends React.Component {
       page: 'dashboard',
       setPage:this.setPage,
       favourites:['BTC','ETH','XMR','DOGE'],
+      timeInterval:'months',
       ...this.savedSettings(),
       setPage:this.setPage,
       addCoin:this.addCoin,
@@ -43,7 +44,8 @@ export class AppProvider extends React.Component {
       isInfavourites:this.isInfavourites,
       confirmFavourites:this.confirmFavourites,
       setCurrentFavourite:this.setCurrentFavourite,
-      setFilteredCoins:this.setFilteredCoins
+      setFilteredCoins:this.setFilteredCoins,
+      changeChartSelect:this.changeChartSelect
     }
   }
   componentDidMount = ()=>{
@@ -63,8 +65,7 @@ export class AppProvider extends React.Component {
     let prices =await this.prices();
   prices = prices.filter(price =>Object.keys(price).length);
   this.setState({prices});
-
-  }
+}
   fetchHistorical = async () =>{
     if(this.state.firstVisit) return;
     let results = await this.historical();
@@ -72,7 +73,7 @@ export class AppProvider extends React.Component {
      {
        name:this.state.currentFavourite,
        data: results.map((ticker,index)=>[
-         moment().subtract({months:TIME_UNITS - index}).valueOf(),
+         moment().subtract({[this.state.timeInterval]:TIME_UNITS - index}).valueOf(),
          ticker.USD
        ])
      }
@@ -100,7 +101,7 @@ export class AppProvider extends React.Component {
           this.state.currentFavourite,
           ['USD'],
           moment()
-           .subtract({months: units})
+           .subtract({[this.state.timeInterval]:units})
            .toDate()
         )
       )
@@ -161,7 +162,9 @@ isInfavourites = key => _.includes(this.state.favourites,key)
   }
   setPage  = page =>this.setState({page})
   setFilteredCoins = (filteredCoins) => this.setState({filteredCoins})
-
+  changeChartSelect = (value) =>{
+    this.setState({timeInterval:value,historical:null},this.fetchHistorical);
+  }
   render(){
     return(
       <AppContext.Provider value ={this.state}>
